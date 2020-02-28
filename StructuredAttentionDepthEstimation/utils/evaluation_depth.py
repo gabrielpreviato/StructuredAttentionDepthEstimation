@@ -9,10 +9,10 @@ from evaluation_utils import *
 parser = argparse.ArgumentParser()
 parser.add_argument("--kitti_dir", type=str, help='Path to the KITTI dataset directory')
 parser.add_argument("--pred_file", type=str, help="Path to the prediction file")
-parser.add_argument("--test_file_list", type=str, default='./utils/filenames/eigen_test_files.txt', 
+parser.add_argument("--test_file_list", type=str, default='./utils/filenames/ssnda_test_files.txt', 
     help="Path to the list of test files")
 parser.add_argument('--min_depth', type=float, default=1e-3, help="Threshold for minimum depth")
-parser.add_argument('--max_depth', type=float, default=80, help="Threshold for maximum depth")
+parser.add_argument('--max_depth', type=float, default=255, help="Threshold for maximum depth")
 parser.add_argument('--which_crop', type=str, default="eigen", help="could be eigen or garg")
 args = parser.parse_args()
 
@@ -20,23 +20,29 @@ def main():
     pred_depths = np.load(args.pred_file)
     print(pred_depths.shape)
     test_files = read_text_lines(args.test_file_list)
+    # print(test_files)
     gt_files, gt_calib, im_sizes, im_files, cams = \
         read_file_data(test_files, args.kitti_dir)
     num_test = len(im_files)
     gt_depths = []
     pred_depths_resized = []
+    # print(gt_files)
     for t_id in range(num_test):
-        camera_id = cams[t_id]  # 2 is left, 3 is right
+        #camera_id = cams[t_id]  # 2 is left, 3 is right
         pred_depths_resized.append(
             cv2.resize(pred_depths[t_id], 
                        (im_sizes[t_id][1], im_sizes[t_id][0]), 
                        interpolation=cv2.INTER_LINEAR))
-        depth = generate_depth_map(gt_calib[t_id], 
-                                   gt_files[t_id], 
-                                   im_sizes[t_id], 
-                                   camera_id, 
-                                   False, 
-                                   True)
+        # depth = generate_depth_map(gt_calib[t_id], 
+        #                            gt_files[t_id], 
+        #                            im_sizes[t_id], 
+        #                            camera_id, 
+        #                            False, 
+        #                            True)
+        # print(gt_files[t_id])
+        depth = cv2.imread(gt_files[t_id])[:, :, 0]
+        
+        # print(depth)
         gt_depths.append(depth.astype(np.float32))
     pred_depths = pred_depths_resized
 
@@ -50,7 +56,9 @@ def main():
     a3      = np.zeros(num_test, np.float32)
     for i in range(num_test):    
         gt_depth = gt_depths[i]
-        pred_depth = np.copy(pred_depths[i])
+        pred_depth = np.copy(pred_depths[i]) * 255
+        print(pred_depth.mean())
+        cv2.imwrite("./output/" + str(i) + ".png", pred_depth)
 
         mask = np.logical_and(gt_depth > args.min_depth, 
                               gt_depth < args.max_depth)

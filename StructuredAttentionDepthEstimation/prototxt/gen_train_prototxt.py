@@ -177,17 +177,19 @@ def SAN(n, bottom, feat_num, feat_width, feat_height):
 if __name__ == '__main__':
     net = caffe.NetSpec()
     net.data, net.label = L.Python(python_param=dict(module='Pixel_Data_Layer', layer='PixelDataLayer',
-        param_str='{ "batch_size": 4, "data_root_dir": "/scratch/local/ssd/danxu/KITTI", "list_file": "/home/danxu/projects/StructuredAttentionDepth/utils/filenames/eigen_train_pairs.txt", "scale_factors": [1], "mean_values": [103.939, 116.779, 123.68], "mirror": True, "shuffle": True, "split": "train" }'), ntop=2)
+        param_str='{ "batch_size": 1, "data_root_dir": "/home/previato/Dropbox/IC/dataset/correct_20m_4", "list_file": "/home/previato/StructuredAttentionDepthEstimation/StructuredAttentionDepthEstimation/utils/filenames/ssnda_train_pairs.txt", "scale_factors": [1], "mean_values": [103.939, 116.779, 123.68], "mirror": True, "shuffle": True, "split": "train" }'), ntop=2)
     
     SAN(net, net.data, feat_num=512, feat_width=80, feat_height=24)
     net.prediction_3d_output = L.Interp(net.prediction_3d,  interp_param=dict(height=188, width=621))
     net.prediction_4f_output = L.Interp(net.prediction_4f,  interp_param=dict(height=188, width=621))
     net.prediction_5c_output = L.Interp(net.prediction_5c,  interp_param=dict(height=188, width=621))
     net.final_output = L.Interp(net.prediction_map,  interp_param=dict(height=188, width=621))
-    #loss
-    net.loss_3d = L.EuclideanMaskLoss(net.prediction_3d_output, net.label, loss_weight=0.8)    
-    net.loss_4f = L.EuclideanMaskLoss(net.prediction_4f_output, net.label, loss_weight=0.8)  
-    net.loss_5c = L.EuclideanMaskLoss(net.prediction_5c_output, net.label, loss_weight=0.8) 
-    net.loss_final = L.EuclideanMaskLoss(net.final_output, net.label, loss_weight=1)
+    # net.norm_final_output = L.Python(net.final_output, python_param=dict(module='MinMaxLayer', layer='MinMaxLayer'))
+    # net.final_output_hdf5 = L.HDF5Output(net.norm_final_output, net.label, hdf5_output_param=dict(file_name="./datah5/output.h5"), ntop=0)
+    # loss
+    net.loss_3d = L.EuclideanLoss(net.prediction_3d_output, net.label, loss_weight=0.8)    
+    net.loss_4f = L.EuclideanLoss(net.prediction_4f_output, net.label, loss_weight=0.8)  
+    net.loss_5c = L.EuclideanLoss(net.prediction_5c_output, net.label, loss_weight=0.8) 
+    net.loss_final = L.EuclideanLoss(net.final_output, net.label, loss_weight=1)
     with open('train_SAN.prototxt', 'w') as f:
         f.write(str(net.to_proto()))

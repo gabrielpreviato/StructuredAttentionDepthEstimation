@@ -101,5 +101,5 @@ if __name__ == '__main__':
     solver = "./prototxt/solver.prototxt"
     snapshot = ''
     pretrained_model = "./models/pretrained_model/ResNet-50-pratrained-model.caffemodel"
-    gpus = [0,1]
+    gpus = [0]
     train(solver, pretrained_model, snapshot, gpus)

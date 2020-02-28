@@ -1,7 +1,7 @@
 #include <vector>
 
-#include "hdf5.h"
-#include "hdf5_hl.h"
+#include "hdf5/serial/hdf5.h"
+#include "hdf5/serial/hdf5_hl.h"
 
 #include "caffe/layers/hdf5_output_layer.hpp"
 #include "caffe/util/hdf5.hpp"
@@ -29,12 +29,22 @@ HDF5OutputLayer<Dtype>::~HDF5OutputLayer<Dtype>() {
 template <typename Dtype>
 void HDF5OutputLayer<Dtype>::SaveBlobs() {
   // TODO: no limit on the number of blobs
-  LOG(INFO) << "Saving HDF5 file " << file_name_;
+  // LOG(INFO) << "Saving HDF5 file " << file_name_;
+  LOG(INFO) << "Saving HDF5 file " << file_name_ << "ds: " << ds_iter_;
   CHECK_EQ(data_blob_.num(), label_blob_.num()) <<
       "data blob and label blob must have the same batch size";
-  hdf5_save_nd_dataset(file_id_, HDF5_DATA_DATASET_NAME, data_blob_);
-  hdf5_save_nd_dataset(file_id_, HDF5_DATA_LABEL_NAME, label_blob_);
+  // hdf5_save_nd_dataset(file_id_, HDF5_DATA_DATASET_NAME, data_blob_);
+  // hdf5_save_nd_dataset(file_id_, HDF5_DATA_LABEL_NAME, label_blob_);
+  ostringstream dataset_name;
+  dataset_name << HDF5_DATA_DATASET_NAME << ds_iter_;
+  hdf5_save_nd_dataset(file_id_, dataset_name.str(), data_blob_);
+  dataset_name.str("");
+  dataset_name << HDF5_DATA_LABEL_NAME << ds_iter_;
+  hdf5_save_nd_dataset(file_id_, dataset_name.str(), label_blob_);
+
   LOG(INFO) << "Successfully saved " << data_blob_.num() << " rows";
+
+  ds_iter_++;
 }
 
 template <typename Dtype>

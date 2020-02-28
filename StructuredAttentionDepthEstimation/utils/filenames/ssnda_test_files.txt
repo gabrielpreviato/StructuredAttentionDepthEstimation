@@ -1,0 +1,12 @@
+/home/previato/Dropbox/IC/dataset/correct_20m_4/rgb/297821.png /home/previato/Dropbox/IC/dataset/correct_20m_4/depth/297821.png
+/home/previato/Dropbox/IC/dataset/correct_20m_4/rgb/299587.png /home/previato/Dropbox/IC/dataset/correct_20m_4/depth/299587.png
+/home/previato/Dropbox/IC/dataset/correct_20m_4/rgb/295254.png /home/previato/Dropbox/IC/dataset/correct_20m_4/depth/295254.png
+/home/previato/Dropbox/IC/dataset/correct_20m_4/rgb/299507.png /home/previato/Dropbox/IC/dataset/correct_20m_4/depth/299507.png
+/home/previato/Dropbox/IC/dataset/correct_20m_4/rgb/300778.png /home/previato/Dropbox/IC/dataset/correct_20m_4/depth/300778.png
+/home/previato/Dropbox/IC/dataset/correct_20m_4/rgb/297818.png /home/previato/Dropbox/IC/dataset/correct_20m_4/depth/297818.png
+/home/previato/Dropbox/IC/dataset/correct_20m_4/rgb/296399.png /home/previato/Dropbox/IC/dataset/correct_20m_4/depth/296399.png
+/home/previato/Dropbox/IC/dataset/correct_20m_4/rgb/297358.png /home/previato/Dropbox/IC/dataset/correct_20m_4/depth/297358.png
+/home/previato/Dropbox/IC/dataset/correct_20m_4/rgb/297863.png /home/previato/Dropbox/IC/dataset/correct_20m_4/depth/297863.png
+/home/previato/Dropbox/IC/dataset/correct_20m_4/rgb/299062.png /home/previato/Dropbox/IC/dataset/correct_20m_4/depth/299062.png
+/home/previato/Dropbox/IC/dataset/correct_20m_4/rgb/300217.png /home/previato/Dropbox/IC/dataset/correct_20m_4/depth/300217.png
+/home/previato/Dropbox/IC/dataset/correct_20m_4/rgb/300632.png /home/previato/Dropbox/IC/dataset/correct_20m_4/depth/300632.png

@@ -90,7 +90,11 @@ class PixelDataLayer(caffe.Layer):
         for itt in range(self.batch_size):
             # Use the batch loader to load the next image.
             im, label_depth = self.batch_loader.load_next_sample()
-            sio.savemat('im.mat', {'im': im});
+            #print im
+	    #print '\n\n'
+	    #print label_depth
+	    #sys.exit(20)
+	    sio.savemat('im.mat', {'im': im});
             #sio.savemat('label_seg.mat', {'label_seg': label_seg});
             #sio.savemat('label_depth.mat', {'label_depth': label_depth});
             #sio.savemat('label_contour', {'label_contour': label_contour});
@@ -170,8 +174,11 @@ class BatchLoader(object):
         img = cv2.resize(img_ori, (621, 188));
         #rotate label, start label from 0 and change the void label from 0 to 255 (to ingore)     
         depth_ori = cv2.imread(osp.join(self.root_dir, depth_file_name), -1);
-        depth = cv2.resize(depth_ori, (621, 188), interpolation=cv2.INTER_NEAREST)
-        # do a simple horizontal flip as data augmentation       
+        depth = cv2.resize(depth_ori, (621, 188), interpolation=cv2.INTER_NEAREST).astype(np.uint16)
+	#print('max', depth.max())
+        #print('min', depth.min())
+	#print('mean', depth.mean())
+	# do a simple horizontal flip as data augmentation       
         if self.mirror == True:
             #print('Yes Mirror!')
             flip = np.random.choice(2)*2-1

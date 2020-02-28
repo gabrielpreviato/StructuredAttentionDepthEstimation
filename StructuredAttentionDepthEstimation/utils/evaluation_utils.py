@@ -72,7 +72,11 @@ def read_text_lines(file_path):
     f = open(file_path, 'r')
     lines = f.readlines()
     f.close()
-    lines = [l.rstrip() for l in lines]
+    lines = [l.split(' ') for l in lines]
+    for l in lines:
+        l[0] = l[0].rstrip()
+        l[1] = l[1].rstrip()
+
     return lines
 
 def read_file_data(files, data_root):
@@ -83,26 +87,30 @@ def read_file_data(files, data_root):
     cams = []
     num_probs = 0
     for filename in files:
-        filename = filename.split()[0]
-        splits = filename.split('/')
-        camera_id = np.int32(splits[2][-1:])   # 2 is left, 3 is right
-        date = splits[0]
-        im_id = splits[4][:10]
-        file_root = '{}/{}'
+        # print filename[0]
+        gt_files.append(filename[1])
+        im_files.append(filename[0])
+        im_sizes.append(cv2.imread(filename[0]).shape[:2])
+    #     filename = filename.split()[0]
+    #     splits = filename.split('/')
+    #     # camera_id = np.int32(splits[2][-1:])   # 2 is left, 3 is right
+    #     date = splits[0]
+    #     im_id = splits[4][:10]
+    #     file_root = '{}/{}'
         
-        im = filename
-        vel = '{}/{}/velodyne_points/data/{}.bin'.format(splits[0], splits[1], im_id)
+    #     im = filename
+    #     vel = '{}/{}/velodyne_points/data/{}.bin'.format(splits[0], splits[1], im_id)
 
-        if os.path.isfile(data_root + im):
-            gt_files.append(data_root + vel)
-            gt_calib.append(data_root + date + '/')
-            im_sizes.append(cv2.imread(data_root + im).shape[:2])
-            im_files.append(data_root + im)
-            cams.append(2)
-        else:
-            num_probs += 1
-            print('{} missing'.format(data_root + im))
-    print('%d files missing' % num_probs)
+    #     if os.path.isfile(data_root + im):
+    #         gt_files.append(data_root + vel)
+    #         gt_calib.append(data_root + date + '/')
+    #         im_sizes.append(cv2.imread(data_root + im).shape[:2])
+    #         im_files.append(data_root + im)
+    #         cams.append(2)
+    #     else:
+    #         num_probs += 1
+    #         print('{} missing'.format(data_root + im))
+    # print('%d files missing' % num_probs)
 
     return gt_files, gt_calib, im_sizes, im_files, cams
 
@@ -115,7 +123,7 @@ def read_file_data_new(filename, data_root):
     num_probs = 0
     filename = filename.split()[0]
     splits = filename.split('/')
-    camera_id = np.int32(splits[2][-1:])   # 2 is left, 3 is right
+    # camera_id = np.int32(splits[2][-1:])   # 2 is left, 3 is right
     date = splits[0]
     im_id = splits[4][:10]
     file_root = '{}/{}'

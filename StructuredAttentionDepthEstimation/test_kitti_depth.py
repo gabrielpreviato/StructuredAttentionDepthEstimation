@@ -41,7 +41,7 @@ min_depth = 1e-3;
 max_depth = 80.0;
 num_samples = 697;
 
-fp = open('./utils/filenames/eigen_test_files.txt');
+fp = open('./utils/filenames/ssnda_test_files.txt');
 lines = fp.readlines();
 image_size = 0;
 image_data_dir = '../';
@@ -57,6 +57,10 @@ for i in tqdm(range(len(lines))):
     img = np.float32(img_ori)
     img = img[:, :, ::-1]  # change to BGR
     img -= img_mean
+    img = img / 255.0
+    print('max', img.max())
+    print('min', img.min())
+    print('mean', img.mean())
     img = img.transpose((2, 0, 1))
     net.blobs['data'].reshape(1, 3, img.shape[1], img.shape[2])
     net.blobs['data'].data[0, ...] = img

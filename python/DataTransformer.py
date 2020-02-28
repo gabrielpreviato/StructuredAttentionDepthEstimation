@@ -31,14 +31,19 @@ class DataTransformer:
         im = np.float32(im)
         im = im[:, :, ::-1]  # change to BGR
         im -= self.mean
-        # resize
+        im = im / float(128.0)
+	# resize
         #im = scale_img(im, False);
         
         ##process depth map
         assert depth_label.dtype == np.uint16;
-        depth_label = depth_label / float(100);
+        #depth_label = depth_label / float(100);
+        depth_label = depth_label / float(256.0);
         #depth_label = scale_img(depth_label, True);
-               
+        #print im.shape
+	#print depth_label.shape
+	depth_label = depth_label[:,:,0]
+	# print(depth_label.dtype)
         im = im.transpose((2, 0, 1));
         depth_label = depth_label.reshape(1, im.shape[1], im.shape[2]);
 
